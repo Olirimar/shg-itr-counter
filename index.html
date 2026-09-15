@@ -33,8 +33,8 @@ function exportCSV(){const d=getData();let csv='Timestamp,Category,Interesting\n
 function setup(id,category){const el=document.getElementById(id);let timer=null;let longPressDone=false;el.addEventListener('pointerdown',()=>{if(adminMode)return;longPressDone=false;timer=setTimeout(()=>{if(adminMode)return;longPressDone=true;save(category,true);flash();},350);});el.addEventListener('pointerup',()=>{clearTimeout(timer);if(adminMode)return;if(!longPressDone)save(category,false);});}
 setup('student','Student');
 setup('professional','Professional');
-document.getElementById('student').addEventListener('pointerdown',()=>{leftPressed=true;if(leftPressed&&rightPressed){adminMode=true;statsTimer=setTimeout(stats,3000);}});
-document.getElementById('professional').addEventListener('pointerdown',()=>{rightPressed=true;if(leftPressed&&rightPressed){adminMode=true;statsTimer=setTimeout(stats,3000);}});
+document.getElementById('student').addEventListener('pointerdown',()=>{leftPressed=true;if(leftPressed&&rightPressed){adminMode=true;statsTimer=setTimeout(stats,2000);}});
+document.getElementById('professional').addEventListener('pointerdown',()=>{rightPressed=true;if(leftPressed&&rightPressed){adminMode=true;statsTimer=setTimeout(stats,2000);}});
 document.getElementById('student').addEventListener('pointerup',()=>{leftPressed=false;clearTimeout(statsTimer);});
 document.getElementById('professional').addEventListener('pointerup',()=>{rightPressed=false;clearTimeout(statsTimer);});
 console.log('SHG Counter Ready');
