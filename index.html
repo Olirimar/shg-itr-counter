@@ -54,17 +54,23 @@ r.category + ',' +
 13
 const blob = new Blob([csv], { type: 'text/csv' });
 14
-const a = document.createElement('a');
+ 
 15
-a.href = URL.createObjectURL(blob);
+const a = document.createElement('a');
 16
-a.download = 'SHG_InnoTrans_Data.csv';
+ 
 17
-a.click();
+a.href = URL.createObjectURL(blob);
 18
+ 
+19
+a.download = 'SHG_InnoTrans_Data.csv';
+20
+ 
+21
+a.click();
+22
 }
-';d.forEach(r=>{csv+=r.timestamp+','+r.category+','+(r.interesting?'Yes':'No')+'
-';});const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SHG_InnoTrans_Data.csv';a.click();}
 function setup(id,category){const el=document.getElementById(id);let start=0;el.addEventListener('pointerdown',()=>{start=Date.now();});el.addEventListener('pointerup',()=>{const dur=Date.now()-start;if(dur>=500){save(category,true);flash();}else{save(category,false);}});}
 setup('student','Student');setup('professional','Professional');
 let left=false,right=false,timer=null;
