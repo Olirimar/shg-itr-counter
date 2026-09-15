@@ -144,6 +144,7 @@ save(category,false);
 }
 setup('student','Student');setup('professional','Professional');
 let left=false,right=false,timer=null;
+let adminMode=false;
 document.getElementById('student').addEventListener('pointerdown',()=>{left=true;if(left&&right){timer=setTimeout(stats,3000);}});
 document.getElementById('professional').addEventListener('pointerdown',()=>{right=true;if(left&&right){timer=setTimeout(stats,3000);}});
 document.getElementById('student').addEventListener('pointerup',()=>{left=false;clearTimeout(timer);});
