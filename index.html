@@ -68,7 +68,11 @@ a.download = 'SHG_InnoTrans_Data.csv';
 20
  
 21
+document.body.appendChild(a);
+2
 a.click();
+3
+document.body.removeChild(a);
 22
 }
 function setup(id,category){const el=document.getElementById(id);let start=0;el.addEventListener('pointerdown',()=>{start=Date.now();});el.addEventListener('pointerup',()=>{const dur=Date.now()-start;if(dur>=500){save(category,true);flash();}else{save(category,false);}});}
