@@ -28,7 +28,7 @@ function save(category,interesting){const d=getData();d.push({timestamp:new Date
 function flash(){const f=document.getElementById('flash');f.style.display='block';setTimeout(()=>{f.style.display='none';},150);}
 function stats(){const d=getData();const s=d.filter(x=>x.category==='Student').length;const p=d.filter(x=>x.category==='Professional').length;const is=d.filter(x=>x.category==='Student'&&x.interesting).length;const ip=d.filter(x=>x.category==='Professional'&&x.interesting).length;document.getElementById('admin').innerHTML=`<h2>SHG Statistics</h2><p>Students: ${s}</p><p>Professionals: ${p}</p><p>Interesting Students: ${is}</p><p>Interesting Professionals: ${ip}</p><p>Total Visitors: ${d.length}</p><p>Total Interesting: ${is+ip}</p><button onclick="exportCSV()">Export CSV</button><button onclick="closeAdmin()">Close</button>`;document.getElementById('admin').style.display='block';}
 function closeAdmin(){document.getElementById('admin').style.display='none';}
-function exportCSV(){const d=getData();let csv='Timestamp,Category,Interesting
+function exportCSV()
 ';d.forEach(r=>{csv+=r.timestamp+','+r.category+','+(r.interesting?'Yes':'No')+'
 ';});const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SHG_InnoTrans_Data.csv';a.click();}
 function setup(id,category){const el=document.getElementById(id);let start=0;el.addEventListener('pointerdown',()=>{start=Date.now();});el.addEventListener('pointerup',()=>{const dur=Date.now()-start;if(dur>=500){save(category,true);flash();}else{save(category,false);}});}
