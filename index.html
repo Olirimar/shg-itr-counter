@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SHG InnoTrans Counter</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#fff;touch-action:none}
+#container{display:flex;height:100vh;width:100vw}
+#student{flex:1;background:#009150}
+#professional{flex:1;background:#F26A21}
+#flash{position:fixed;inset:0;background:#fff;display:none;z-index:1000}
+#admin{position:fixed;inset:0;background:#fff;display:none;z-index:2000;padding:20px;font-family:Arial,sans-serif;overflow:auto}
+button{font-size:18px;padding:12px 20px;margin-right:10px}
+</style>
+</head>
+<body>
+<div id="container">
+<div id="student"></div>
+<div id="professional"></div>
+</div>
+<div id="flash"></div>
+<div id="admin"></div>
+<script>
+const KEY='SHG_INNOTRANS_COUNTER';
+function getData(){return JSON.parse(localStorage.getItem(KEY)||'[]');}
+function save(category,interesting){const d=getData();d.push({timestamp:new Date().toISOString(),category:category,interesting:interesting});localStorage.setItem(KEY,JSON.stringify(d));}
+function flash(){const f=document.getElementById('flash');f.style.display='block';setTimeout(()=>{f.style.display='none';},150);}
+function stats(){const d=getData();const s=d.filter(x=>x.category==='Student').length;const p=d.filter(x=>x.category==='Professional').length;const is=d.filter(x=>x.category==='Student'&&x.interesting).length;const ip=d.filter(x=>x.category==='Professional'&&x.interesting).length;document.getElementById('admin').innerHTML=`<h2>SHG Statistics</h2><p>Students: ${s}</p><p>Professionals: ${p}</p><p>Interesting Students: ${is}</p><p>Interesting Professionals: ${ip}</p><p>Total Visitors: ${d.length}</p><p>Total Interesting: ${is+ip}</p><button onclick="exportCSV()">Export CSV</button><button onclick="closeAdmin()">Close</button>`;document.getElementById('admin').style.display='block';}
+function closeAdmin(){document.getElementById('admin').style.display='none';}
+function exportCSV(){const d=getData();let csv='Timestamp,Category,Interesting
+';d.forEach(r=>{csv+=r.timestamp+','+r.category+','+(r.interesting?'Yes':'No')+'
+';});const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SHG_InnoTrans_Data.csv';a.click();}
+function setup(id,category){const el=document.getElementById(id);let start=0;el.addEventListener('pointerdown',()=>{start=Date.now();});el.addEventListener('pointerup',()=>{const dur=Date.now()-start;if(dur>=500){save(category,true);flash();}else{save(category,false);}});}
+setup('student','Student');setup('professional','Professional');
+let left=false,right=false,timer=null;
+document.getElementById('student').addEventListener('pointerdown',()=>{left=true;if(left&&right){timer=setTimeout(stats,3000);}});
+document.getElementById('professional').addEventListener('pointerdown',()=>{right=true;if(left&&right){timer=setTimeout(stats,3000);}});
+document.getElementById('student').addEventListener('pointerup',()=>{left=false;clearTimeout(timer);});
+document.getElementById('professional').addEventListener('pointerup',()=>{right=false;clearTimeout(timer);});
+console.log('SHG Counter Ready');
+</script>
+</body>
+</html>
