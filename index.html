@@ -145,7 +145,31 @@ save(category,false);
 setup('student','Student');setup('professional','Professional');
 let left=false,right=false,timer=null;
 let adminMode=false;
-document.getElementById('student').addEventListener('pointerdown',()=>{left=true;if(left&&right){timer=setTimeout(stats,3000);}});
+document.getElementById('student').addEventListener('pointerdown',()=>{
+2
+ 
+3
+left=true;
+4
+ 
+5
+if(left&&right){
+6
+ 
+7
+adminMode=true;
+8
+ 
+9
+timer=setTimeout(stats,3000);
+10
+ 
+11
+}
+12
+ 
+13
+});
 document.getElementById('professional').addEventListener('pointerdown',()=>{right=true;if(left&&right){timer=setTimeout(stats,3000);}});
 document.getElementById('student').addEventListener('pointerup',()=>{left=false;clearTimeout(timer);});
 document.getElementById('professional').addEventListener('pointerup',()=>{right=false;clearTimeout(timer);});
