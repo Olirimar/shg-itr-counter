@@ -82,15 +82,12 @@ function setup(id,category){const el=document.getElementById(id);let timer=null;
         return;
     }
 
-    if(leftPressed && rightPressed){
-        return;
-    }
-
     if(!longPressDone){
         save(category,false);
     }
 
 });
+}
 setup('student','Student');
 setup('professional','Professional');
 document.getElementById('student').addEventListener('pointerdown',()=>{
