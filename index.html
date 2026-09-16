@@ -64,11 +64,26 @@ function exportCSV(){
 
     });
 
-    document.getElementById('admin').innerHTML=
-        '<h2>CSV Export</h2>'+
-        '<textarea id="csvbox" style="width:100%;height:60vh;">'+csv+'</textarea><br><br>'+
-        '<button onclick="copyCSV()">Copy CSV</button> '+
-        '<button onclick="stats()">Back</button>';
+    const blob=new Blob([csv],{
+        type:'text/csv;charset=utf-8;'
+    });
+
+    const url=URL.createObjectURL(blob);
+
+    const a=document.createElement('a');
+
+    a.href=url;
+
+    a.download='InnoTrans_Export.csv';
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+
 }
 function copyCSV(){
 
