@@ -90,7 +90,10 @@ document.getElementById('student').addEventListener('pointerdown',()=>{
     }
 
 });
-document.getElementById('professional').addEventListener('pointerdown',()=>{rightPressed=true;if(leftPressed&&rightPressed){adminMode=true;statsTimer=setTimeout(stats,2000);}});
+document.getElementById('student').addEventListener('pointerup',()=>{
+leftPressed=false;
+clearTimeout(statsTimer);
+});
 document.getElementById('professional').addEventListener('pointerdown',()=>{
 
     rightPressed=true;
