@@ -34,7 +34,13 @@ function stats(){
     leftPressed=false;
     rightPressed=false;
 
-    const d=getData();const s=d.filter(x=>x.category==='Student').length;const p=d.filter(x=>x.category==='Professional').length;const is=d.filter(x=>x.category==='Student'&&x.interesting).length;const ip=d.filter(x=>x.category==='Professional'&&x.interesting).length;document.getElementById('admin').innerHTML=`<h2>SHG Statistics</h2><p>Students: ${s}</p><p>Professionals: ${p}</p><p>Interesting Students: ${is}</p><p>Interesting Professionals: ${ip}</p><p>Total Visitors: ${d.length}</p><p>Total Interesting: ${is+ip}</p><button onclick="exportCSV()">Export CSV</button><button onclick="closeAdmin()">Close</button>`;document.getElementById('admin').style.display='block';}
+    const d=getData();const s=d.filter(
+    x=>x.category==='Student' && !x.interesting
+).length;
+
+const p=d.filter(
+    x=>x.category==='Professional' && !x.interesting
+).length;const is=d.filter(x=>x.category==='Student'&&x.interesting).length;const ip=d.filter(x=>x.category==='Professional'&&x.interesting).length;document.getElementById('admin').innerHTML=`<h2>SHG Statistics</h2><p>Students: ${s}</p><p>Professionals: ${p}</p><p>Interesting Students: ${is}</p><p>Interesting Professionals: ${ip}</p><p>Total Visitors: ${d.length}</p><p>Total Interesting: ${is+ip}</p><button onclick="exportCSV()">Export CSV</button><button onclick="closeAdmin()">Close</button>`;document.getElementById('admin').style.display='block';}
 function closeAdmin(){
 
     adminMode=false;
