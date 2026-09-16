@@ -9,10 +9,9 @@ html,body{margin:0;height:100%;overflow:hidden;touch-action:none}
 #container{display:flex;width:100vw;height:100vh}
 #student{flex:1;background:#009150}
 #professional{flex:1;background:#F26A21}
-#flash{position:fixed;inset:0;display:none;z-index:1000}
-#admin{position:fixed;inset:0;background:#fff;display:none;z-index:2000;padding:20px;font-family:Arial,Helvetica,sans-serif;overflow:auto}
-textarea{width:100%;height:60vh}
-button{font-size:18px;padding:12px 20px;margin:5px}
+#flash{position:fixed;inset:0;background:white;display:none;z-index:1000}
+#admin{position:fixed;inset:0;background:white;display:none;z-index:2000;padding:20px;font-family:Arial,sans-serif;overflow:auto}
+button{font-size:18px;padding:12px 20px;margin-right:10px;margin-top:10px}
 </style>
 </head>
 <body>
@@ -27,16 +26,13 @@ const KEY='SHG_INNOTRANS_COUNTER';
 let adminMode=false,leftPressed=false,rightPressed=false,statsTimer=null;
 function getData(){return JSON.parse(localStorage.getItem(KEY)||'[]');}
 function save(category,interesting){const d=getData();d.push({timestamp:new Date().toISOString(),category,interesting});localStorage.setItem(KEY,JSON.stringify(d));}
-function colorFlash(color){const f=document.getElementById('flash');f.style.background=color;f.style.display='block';setTimeout(()=>{f.style.display='none';},150);}
-function stats(){leftPressed=false;rightPressed=false;const d=getData();const s=d.filter(x=>x.category==='Student').length;const p=d.filter(x=>x.category==='Professional').length;const is=d.filter(x=>x.category==='Student'&&x.interesting).length;const ip=d.filter(x=>x.category==='Professional'&&x.interesting).length;document.getElementById('admin').innerHTML=`<h2>SHG Statistics</h2><p>Students: ${s}</p><p>Professionals: ${p}</p><p>Interesting Students: ${is}</p><p>Interesting Professionals: ${ip}</p><p>Total Visitors: ${d.length}</p><p>Total Interesting: ${is+ip}</p><button onclick="exportCSV()">Export CSV</button><button onclick="closeAdmin()">Close</button>`;document.getElementById('admin').style.display='block';}
-function closeAdmin(){adminMode=false;leftPressed=false;rightPressed=false;document.getElementById('admin').style.display='none';}
-function exportCSV(){const d=getData();let csv='Timestamp,Category,Interesting
-';d.forEach(r=>{csv+=r.timestamp+','+r.category+','+(r.interesting?'Yes':'No')+'
-';});document.getElementById('admin').innerHTML=`<h2>CSV Export</h2><textarea id="csvbox">${csv}</textarea><br><button onclick="copyCSV()">Copy CSV</button><button onclick="stats()">Back</button>`;}
-function copyCSV(){const t=document.getElementById('csvbox');t.select();document.execCommand('copy');alert('CSV copied');}
-function setup(id,category,flashColor){const el=document.getElementById(id);let timer=null;let longDone=false;let blocked=false;el.addEventListener('pointerdown',()=>{blocked=(leftPressed&&rightPressed);longDone=false;if(adminMode)return;timer=setTimeout(()=>{if(adminMode||blocked)return;longDone=true;save(category,true);colorFlash(flashColor);},350);});el.addEventListener('pointerup',()=>{clearTimeout(timer);if(adminMode||blocked)return;if(!longDone){save(category,false);}});}
-setup('student','Student','#009150');
-setup('professional','Professional','#F26A21');
+function flash(){const f=document.getElementById('flash');f.style.display='block';setTimeout(()=>f.style.display='none',150);}
+function stats(){const d=getData();const s=d.filter(x=>x.category==='Student').length;const p=d.filter(x=>x.category==='Professional').length;const is=d.filter(x=>x.category==='Student'&&x.interesting).length;const ip=d.filter(x=>x.category==='Professional'&&x.interesting).length;document.getElementById('admin').innerHTML=`<h2>SHG Statistics</h2><p>Students: ${s}</p><p>Professionals: ${p}</p><p>Interesting Students: ${is}</p><p>Interesting Professionals: ${ip}</p><p>Total Visitors: ${d.length}</p><p>Total Interesting: ${is+ip}</p><button onclick="exportCSV()">Export CSV</button><button onclick="closeAdmin()">Close</button>`;document.getElementById('admin').style.display='block';}
+function closeAdmin(){adminMode=false;document.getElementById('admin').style.display='none';}
+function exportCSV(){const d=getData();let csv='Timestamp,Category,Interesting\n';d.forEach(r=>{csv+=r.timestamp+','+r.category+','+(r.interesting?'Yes':'No')+'\n';});alert(csv);}
+function setup(id,category){const el=document.getElementById(id);let timer=null;let longPressDone=false;el.addEventListener('pointerdown',()=>{if(adminMode)return;longPressDone=false;timer=setTimeout(()=>{if(adminMode)return;longPressDone=true;save(category,true);flash();},350);});el.addEventListener('pointerup',()=>{clearTimeout(timer);if(adminMode)return;if(!longPressDone)save(category,false);});}
+setup('student','Student');
+setup('professional','Professional');
 document.getElementById('student').addEventListener('pointerdown',()=>{leftPressed=true;if(leftPressed&&rightPressed){adminMode=true;statsTimer=setTimeout(stats,2000);}});
 document.getElementById('professional').addEventListener('pointerdown',()=>{rightPressed=true;if(leftPressed&&rightPressed){adminMode=true;statsTimer=setTimeout(stats,2000);}});
 document.getElementById('student').addEventListener('pointerup',()=>{leftPressed=false;clearTimeout(statsTimer);});
