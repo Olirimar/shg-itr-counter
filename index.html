@@ -29,6 +29,8 @@ function save(category,interesting){const d=getData();d.push({timestamp:new Date
 function flash(){const f=document.getElementById('flash');f.style.display='block';setTimeout(()=>f.style.display='none',150);}
 function stats(){
 
+    adminMode=true;
+
     leftPressed=false;
     rightPressed=false;
 
@@ -72,7 +74,23 @@ function copyCSV(){
 
     alert('CSV copied');
 }
-function setup(id,category){const el=document.getElementById(id);let timer=null;let longPressDone=false;el.addEventListener('pointerdown',()=>{if(adminMode)return;longPressDone=false;timer=setTimeout(()=>{if(adminMode)return;longPressDone=true;save(category,true);flash();},350);});el.addEventListener('pointerup',()=>{clearTimeout(timer);if(adminMode)return;if(!longPressDone)save(category,false);});}
+function setup(id,category){const el=document.getElementById(id);let timer=null;let longPressDone=false;el.addEventListener('pointerdown',()=>{if(adminMode)return;longPressDone=false;timer=setTimeout(()=>{if(adminMode)return;longPressDone=true;save(category,true);flash();},350);});el.addEventListener('pointerup',()=>{
+
+    clearTimeout(timer);
+
+    if(adminMode){
+        return;
+    }
+
+    if(leftPressed && rightPressed){
+        return;
+    }
+
+    if(!longPressDone){
+        save(category,false);
+    }
+
+});
 setup('student','Student');
 setup('professional','Professional');
 document.getElementById('student').addEventListener('pointerdown',()=>{
